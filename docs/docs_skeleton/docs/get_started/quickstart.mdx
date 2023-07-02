@@ -2,7 +2,7 @@
 
 ## Installation
 
-To install LangChain run:
+To install LangChain, run:
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
@@ -14,7 +14,7 @@ For more details, see our [Installation guide](/docs/get_started/installation.ht
 
 ## Environment setup
 
-Using LangChain will usually require integrations with one or more model providers, data stores, APIs, etc. For this example, we'll use OpenAI's model APIs.
+Using LangChain normally requires integrations with one or more model providers, data stores, APIs, etc. For this example, we'll use OpenAI's model APIs.
 
 import OpenAISetup from "@snippets/get_started/quickstart/openai_setup.mdx"
 
@@ -22,7 +22,7 @@ import OpenAISetup from "@snippets/get_started/quickstart/openai_setup.mdx"
 
 ## Building an application
 
-Now we can start building our language model application. LangChain provides many modules that can be used to build language model applications. Modules can be used as stand-alones in simple applications and they can be combined for more complex use cases.
+Now we can start building our language model application. LangChain provides many modules that can be used to construct language model applications. Modules can be used as stand-alones in simple applications, and they can be combined for more complex use cases.
 
 ## LLMs
 #### Get predictions from a language model
@@ -47,7 +47,7 @@ import ChatModel from "@snippets/get_started/quickstart/chat_model.mdx"
 
 ## Prompt templates
 
-Most LLM applications do not pass user input directly into an LLM. Usually they will add the user input to a larger piece of text, called a prompt template, that provides additional context on the specific task at hand.
+Most LLM applications do not pass user input directly into an LLM. Usually, they will add the user input to a larger piece of text, called a prompt template, that provides additional context on the specific task at hand.
 
 In the previous example, the text we passed to the model contained instructions to generate a company name. For our application, it'd be great if the user only had to provide the description of a company/product, without having to worry about giving the model instructions.
 
@@ -57,7 +57,7 @@ import PromptTemplateChatModel from "@snippets/get_started/quickstart/prompt_tem
 <Tabs>
     <TabItem value="llms" label="LLMs" default>
 
-With PromptTemplates this is easy! In this case our template would be very simple:
+With PromptTemplates, this is easy! In this case, our template would be very simple:
 
 <PromptTemplateLLM/>
 </TabItem>
@@ -65,7 +65,7 @@ With PromptTemplates this is easy! In this case our template would be very simpl
 
 Similar to LLMs, you can make use of templating by using a `MessagePromptTemplate`. You can build a `ChatPromptTemplate` from one or more `MessagePromptTemplate`s. You can use `ChatPromptTemplate`'s `format_messages` method to generate the formatted messages.
 
-Because this is generating a list of messages, it is slightly more complex than the normal prompt template which is generating only a string. Please see the detailed guides on prompts to understand more options available to you here.
+Because this is generating a list of messages, it is slightly more complex than the normal prompt template, which is generating only a string. Please see the detailed guides on prompts to understand more options available to you here.
 
 <PromptTemplateChatModel/>
     </TabItem>
@@ -126,7 +126,7 @@ And set the `SERPAPI_API_KEY` environment variable.
 </TabItem>
 <TabItem value="chat_models" label="Chat models">
 
-Agents can also be used with chat models, you can initialize one using `AgentType.CHAT_ZERO_SHOT_REACT_DESCRIPTION` as the agent type.
+Agents can also be used with chat models. You can initialize one using `AgentType.CHAT_ZERO_SHOT_REACT_DESCRIPTION` as the agent type.
 
 <AgentChatModel/>
 </TabItem>
@@ -134,11 +134,11 @@ Agents can also be used with chat models, you can initialize one using `AgentTyp
 
 ## Memory
 
-The chains and agents we've looked at so far have been stateless, but for many applications it's necessary to reference past interactions. This is clearly the case with a chatbot for example, where you want it to understand new messages in the context of past messages.
+The chains and agents we've looked at so far have been stateless, but for many applications, it's necessary to reference past interactions. This is clearly the case with a chatbot, for example, where you want it to understand new messages in the context of past messages.
 
-The Memory module gives you a way to maintain application state. The base Memory interface is simple: it lets you update state given the latest run inputs and outputs and it lets you modify (or contextualize) the next input using the stored state.
+The Memory module gives you a way to maintain application state. The base Memory interface is simple: it lets you update state given the latest run inputs and outputs, and it lets you modify (or contextualize) the next input using the stored state.
 
-There are a number of built-in memory systems. The simplest of these is a buffer memory which just prepends the last few inputs/outputs to the current input - we will use this in the example below.
+There are a number of built-in memory systems. The simplest of these is a buffer memory which just prepends the last few inputs/outputs to the current input. We will use this in the example below.
 
 import MemoryLLM from "@snippets/get_started/quickstart/memory_llms.mdx"
 import MemoryChatModel from "@snippets/get_started/quickstart/memory_chat_models.mdx"
@@ -150,7 +150,7 @@ import MemoryChatModel from "@snippets/get_started/quickstart/memory_chat_models
 </TabItem>
 <TabItem value="chat_models" label="Chat models">
 
-You can use Memory with chains and agents initialized with chat models. The main difference between this and Memory for LLMs is that rather than trying to condense all previous messages into a string, we can keep them as their own unique memory object.
+You can use Memory with chains and agents initialized with chat models. The main difference between this and Memory for LLMs is that instead of trying to condense all previous messages into a string, we can keep them as their own unique memory object.
 
 <MemoryChatModel/>
 
