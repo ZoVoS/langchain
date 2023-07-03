@@ -74,16 +74,14 @@ It provides the following methods:
 An `abstractmethod` `load()` is provided, which should return a list of all Document objects. This list is fully materialized in memory, and may be more convenient in some cases, at the cost of potentially using more memory. The idea is to provide backwards compatibility for code that expects to be able to get a list of all Document objects.
 
 ### load_and_split(text_splitter: Optional[TextSplitter] = None) -> List[Document]
-The `load_and_split()` method loads the documents and then splits them into chunks, returning the chunks as Document objects. This method uses `load()`, so it also materializes all documents in memory. If no TextSplitter is provided, it uses the `RecursiveCharacterTextSplitter` by default. It Returns a list of Documents.
+The `load_and_split()` method loads the documents and then splits them into chunks, returning the chunks as Document objects. This method uses `load()`, so it also materializes all documents in memory. If no TextSplSitter is provided, it uses the `RecursiveCharacterTextSplitter` by default. It returns a list of Documents.
 
 ### lazy_load() -> Iterator[Document]
-A lazy loader for Documents. Subclasses should implement this method using generators to avoid loading all Documents into memory at once.
+The `lazy_load()` method in the `BaseLoader` class serves as a lazy loader for `Document` objects. Rather than loading all documents into memory at once – which could potentially lead to an Out of Memory (OOM) error when dealing with a large number of documents – it provides a memory-efficient way to iterate over them. 
 
-Note: The `lazy_load()` method will be upgraded to an abstract method in all existing subclasses.
+This method is expected to return an iterator that generates `Document` objects one at a time on demand. The design of this method utilizes Python's generators, making it especially useful for memory management in large-scale applications.
 
-The purpose of the `lazy_load` method in the `BaseLoader` class is to provide a way to iterate over a collection of `Document` objects without having to load all of them into memory at once. This can be especially useful when dealing with a large number of documents, as loading all documents into memory could potentially use a lot of memory, possibly leading to an Out of Memory (OOM) error.
-
-This method is designed to return an iterator, which can produce `Document` objects one by one on demand, rather than creating a list of all `Document` objects upfront. This is achieved through the use of Python's generators.
+Subclasses should implement this `lazy_load()` method according to their specific needs. Note that it is planned for `lazy_load()` to be upgraded to an abstract method across all existing subclasses in the future.
 
 ## Simplest Document
 
