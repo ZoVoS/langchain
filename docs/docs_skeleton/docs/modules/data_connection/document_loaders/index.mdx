@@ -2,15 +2,105 @@
 sidebar_position: 0
 ---
 # Document loaders
+Document loaders are used to load ''documents'' from various sources. A ''document'' represents a piece of text along with associated metadata.
 
-Use document loaders to load data from a source as `Document`'s. A `Document` is a piece of text
-and associated metadata. For example, there are document loaders for loading a simple `.txt` file, for loading the text
-contents of any web page, or even for loading a transcript of a YouTube video.
+## Introduction
+Document loaders enable you to load data from different sources and convert them into ''Document'' objects. These loaders are designed to handle a wide range of sources such as web and social media, cloud storage providers, databases, file formats, productivity and collaboration tools and web scraping tools.
 
-Document loaders expose a "load" method for loading data as documents from a configured source. They optionally
-implement a "lazy load" as well for lazily loading data into memory.
+## Class
+The BaseLoader class is an abstract base class that defines the interface for loading documents.
 
-## Get started
+<details>
+  <summary>See the Source Here</summary>
+```python
+class BaseLoader(ABC):
+    """Interface for loading Documents.
+
+    Implementations should implement the lazy-loading method using generators
+    to avoid loading all Documents into memory at once.
+
+    The `load` method will remain as is for backwards compatibility, but its
+    implementation should be just `list(self.lazy_load())`.
+    """
+
+    # Sub-classes should implement this method
+    # as return list(self.lazy_load()).
+    # This method returns a List which is materialized in memory.
+    @abstractmethod
+    def load(self) -> List[Document]:
+        """Load data into Document objects."""
+
+    def load_and_split(
+        self, text_splitter: Optional[TextSplitter] = None
+    ) -> List[Document]:
+        """Load Documents and split into chunks. Chunks are returned as Documents.
+
+        Args:
+            text_splitter: TextSplitter instance to use for splitting documents.
+              Defaults to RecursiveCharacterTextSplitter.
+
+        Returns:
+            List of Documents.
+        """
+        if text_splitter is None:
+            _text_splitter: TextSplitter = RecursiveCharacterTextSplitter()
+        else:
+            _text_splitter = text_splitter
+        docs = self.load()
+        return _text_splitter.split_documents(docs)
+
+    # Attention: This method will be upgraded into an abstractmethod once it's
+    #            implemented in all the existing subclasses.
+    def lazy_load(
+        self,
+    ) -> Iterator[Document]:
+        """A lazy loader for Documents."""
+        raise NotImplementedError(
+            f"{self.__class__.__name__} does not implement lazy_load()"
+        )
+```
+</details>
+
+It provides the following methods:
+
+load()
+An `abstractmethod` `load()` is provided, which should return a list of all Document objects. This list is fully materialized in memory, and may be more convenient in some cases, at the cost of potentially using more memory. The idea is to provide backwards compatibility for code that expects to be able to get a list of all Document objects.
+
+load_and_split(text_splitter: Optional[TextSplitter] = None) -> List[Document]
+The load_and_split() method loads the documents and then splits them into chunks, returning the chunks as Document objects. This method uses load(), so it also materializes all documents in memory. If no TextSplitter is provided, it uses the RecursiveCharacterTextSplitter by default. It Returns a list of Documents.
+
+lazy_load() -> Iterator[Document]
+A lazy loader for Documents. Subclasses should implement this method using generators to avoid loading all Documents into memory at once.
+
+Note: The lazy_load() method will be upgraded to an abstract method in all existing subclasses.
+
+The purpose of the lazy_load method in the BaseLoader class is to provide a way to iterate over a collection of Document objects without having to load all of them into memory at once. This can be especially useful when dealing with a large number of documents, as loading all documents into memory could potentially use a lot of memory, possibly leading to an Out of Memory (OOM) error.
+
+This method is designed to return an iterator, which can produce Document objects one by one on demand, rather than creating a list of all Document objects upfront. This is achieved through the use of Python's generators.
+
+## Simplest Document
+
+### Making the Document
+If you have a piece of text that you want to load as a Document without any specific data source, you can use the Copy-Paste Loader. In this case, you can directly construct a Document object without using a DocumentLoader.
+
+```python
+from langchain.docstore.document import Document
+
+text = "..... put the text you copy-pasted here ......"
+
+doc = Document(page_content=text)
+```
+
+### Adding Metadata
+If you want to include metadata about the source of the text, you can easily add it using the metadata parameter:
+
+```python
+metadata = {"source": "internet", "date": "Friday"}
+
+doc = Document(page_content=text, metadata=metadata)
+```
+
+## Simplest Loader
 
 import GetStarted from "@snippets/modules/data_connection/document_loaders/get_started.mdx"
 
