@@ -2,16 +2,20 @@
 sidebar_position: 0
 ---
 # Document loaders
-Document loaders are used to load ''documents'' from various sources. A ''document'' represents a piece of text along with associated metadata.
+Document loaders are used to load `Documents` from various sources. A `Document` represents a piece of text along with associated metadata.
 
 ## Introduction
-Document loaders enable you to load data from different sources and convert them into ''Document'' objects. These loaders are designed to handle a wide range of sources such as web and social media, cloud storage providers, databases, file formats, productivity and collaboration tools and web scraping tools.
+Document loaders enable you to load data from different sources and convert them into `Document` objects. These loaders are designed to handle a wide range of sources such as web and social media, cloud storage providers, databases, file formats, productivity and collaboration tools and web scraping tools.
 
 ## Class
 The BaseLoader class is an abstract base class that defines the interface for loading documents.
 
+
 <details>
-  <summary>See the Source Here</summary>
+<summary>
+See the Source Here
+</summary>
+
 ```python
 class BaseLoader(ABC):
     """Interface for loading Documents.
@@ -59,24 +63,27 @@ class BaseLoader(ABC):
             f"{self.__class__.__name__} does not implement lazy_load()"
         )
 ```
+
 </details>
+
+
 
 It provides the following methods:
 
-load()
+### load()
 An `abstractmethod` `load()` is provided, which should return a list of all Document objects. This list is fully materialized in memory, and may be more convenient in some cases, at the cost of potentially using more memory. The idea is to provide backwards compatibility for code that expects to be able to get a list of all Document objects.
 
-load_and_split(text_splitter: Optional[TextSplitter] = None) -> List[Document]
-The load_and_split() method loads the documents and then splits them into chunks, returning the chunks as Document objects. This method uses load(), so it also materializes all documents in memory. If no TextSplitter is provided, it uses the RecursiveCharacterTextSplitter by default. It Returns a list of Documents.
+### load_and_split(text_splitter: Optional[TextSplitter] = None) -> List[Document]
+The `load_and_split()` method loads the documents and then splits them into chunks, returning the chunks as Document objects. This method uses `load()`, so it also materializes all documents in memory. If no TextSplitter is provided, it uses the `RecursiveCharacterTextSplitter` by default. It Returns a list of Documents.
 
-lazy_load() -> Iterator[Document]
+### lazy_load() -> Iterator[Document]
 A lazy loader for Documents. Subclasses should implement this method using generators to avoid loading all Documents into memory at once.
 
-Note: The lazy_load() method will be upgraded to an abstract method in all existing subclasses.
+Note: The `lazy_load()` method will be upgraded to an abstract method in all existing subclasses.
 
-The purpose of the lazy_load method in the BaseLoader class is to provide a way to iterate over a collection of Document objects without having to load all of them into memory at once. This can be especially useful when dealing with a large number of documents, as loading all documents into memory could potentially use a lot of memory, possibly leading to an Out of Memory (OOM) error.
+The purpose of the `lazy_load` method in the `BaseLoader` class is to provide a way to iterate over a collection of `Document` objects without having to load all of them into memory at once. This can be especially useful when dealing with a large number of documents, as loading all documents into memory could potentially use a lot of memory, possibly leading to an Out of Memory (OOM) error.
 
-This method is designed to return an iterator, which can produce Document objects one by one on demand, rather than creating a list of all Document objects upfront. This is achieved through the use of Python's generators.
+This method is designed to return an iterator, which can produce `Document` objects one by one on demand, rather than creating a list of all `Document` objects upfront. This is achieved through the use of Python's generators.
 
 ## Simplest Document
 
